@@ -12,13 +12,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun ResultScreen(score: String, onRestartGame: () -> Unit = {}, onLogout: () -> Unit = {}) {
-    Column (
+fun ResultScreen(
+    score: String,
+    oldNumberOfColours: String,
+    playerName: String,
+    onRestartGame: (String, String) -> Unit = { s: String, s1: String -> },
+    onLogout: () -> Unit = {}
+) {
+    Column(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(text="Results", fontSize = 50.sp, modifier = Modifier.padding(4.dp))
-        Text(text="Recent score: $score", fontSize = 30.sp, modifier = Modifier.padding(4.dp))
-        Button(onClick = onRestartGame) {
+        Text(text = "Results", fontSize = 50.sp, modifier = Modifier.padding(4.dp))
+        Text(text = "$playerName - $oldNumberOfColours colors: $score points", fontSize = 30.sp, modifier = Modifier.padding(4.dp))
+        Button(onClick = { onRestartGame(oldNumberOfColours, playerName) }) {
             Text(text = "Restart game")
         }
         Button(onClick = onLogout) {
@@ -30,5 +36,5 @@ fun ResultScreen(score: String, onRestartGame: () -> Unit = {}, onLogout: () -> 
 @Composable
 @Preview(showBackground = true)
 fun ResultScreenPreview() {
-    ResultScreen("4")
+    ResultScreen("4", "5", "test")
 }

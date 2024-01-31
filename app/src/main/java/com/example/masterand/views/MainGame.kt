@@ -21,7 +21,7 @@ import com.example.masterand.utils.generateRandomColors
 import com.example.masterand.utils.getNextColorForIndex
 
 @Composable
-fun MainGame(numberOfColours: String, onScoreScreen: (String) -> Unit = {}, onLogout: () -> Unit = {}) {
+fun MainGame(numberOfColours: String, playerName: String, onScoreScreen: (String, String, String) -> Unit = { s: String, s1: String, s2: String -> }, onLogout: () -> Unit = {}) {
     val emptyRow = List(4) { Color.White }
     val solution = remember { generateRandomColors(numberOfColours.toInt()) }
 
@@ -73,7 +73,7 @@ fun MainGame(numberOfColours: String, onScoreScreen: (String) -> Unit = {}, onLo
                     }
                 )
             } else {
-                Button(onClick = {onScoreScreen(score.intValue.toString())}) {
+                Button(onClick = {onScoreScreen(score.intValue.toString(), numberOfColours, playerName)}) {
                     Text(text = "High score table")
                 }
             }
@@ -88,5 +88,5 @@ fun MainGame(numberOfColours: String, onScoreScreen: (String) -> Unit = {}, onLo
 @Preview(showBackground = true)
 @Composable
 fun MainGamePreview() {
-    MainGame("5")
+    MainGame("5", "user")
 }

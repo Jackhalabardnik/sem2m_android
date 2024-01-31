@@ -14,9 +14,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.masterand.ui.theme.MasterAndTheme
 import com.example.masterand.views.MainGame
 import com.example.masterand.views.ProfileScreenInitial
@@ -50,13 +52,16 @@ class MainActivity : ComponentActivity() {
                             }
                         ) {
                             ProfileScreenInitial(
-                                onStartGame = { numberOfColours ->
-                                    navController.navigate("MainGame/$numberOfColours")
+                                onStartGame = { numberOfColours, playerName ->
+                                    navController.navigate("MainGame/$numberOfColours/$playerName")
                                 }
                             )
                         }
                         composable(
-                            route = "MainGame/{numberOfColours}",
+                            route = "MainGame/{numberOfColours}/{playerName}",
+                            arguments = listOf(
+                                navArgument("numberOfColours") { type = NavType.StringType },
+                                navArgument("playerName") { type = NavType.StringType }),
                             enterTransition = {
                                 slideInHorizontally(
                                     animationSpec = tween(1000, easing = EaseIn),
@@ -72,9 +77,9 @@ class MainActivity : ComponentActivity() {
                         ) {
                             MainGame(
                                 numberOfColours = it.arguments?.getString("numberOfColours") ?: "0",
-                                playerName = it.arguments?.getString("playerName") ?: "0",
+                                playerName = it.arguments?.getString("playerName") ?: "no user",
                                 onScoreScreen = { score, oldNumberOfColours, playerName ->
-                                    navController.navigate("ResultScreen/$score/$oldNumberOfColours/$playerName")
+                                    navController.navigate("ResultScreen/$score/$playerName/$oldNumberOfColours")
                                 },
                                 onLogout = {
                                     navController.navigate("ProfileScreen")
@@ -82,7 +87,11 @@ class MainActivity : ComponentActivity() {
 
                         }
                         composable(
-                            route = "ResultScreen/{score}",
+                            route = "ResultScreen/{score}/{playerName}/{oldNumberOfColours}",
+                            arguments = listOf(
+                                navArgument("score") { type = NavType.StringType },
+                                navArgument("playerName") { type = NavType.StringType },
+                                navArgument("oldNumberOfColours") { type = NavType.StringType },),
                             enterTransition = {
                                 slideInHorizontally(
                                     animationSpec = tween(1000, easing = EaseIn),
@@ -98,8 +107,10 @@ class MainActivity : ComponentActivity() {
                         ) {
                             ResultScreen(
                                 score = it.arguments?.getString("score") ?: "0",
-                                onRestartGame = {
-                                    navController.navigate("MainGame/0")
+                                playerName = it.arguments?.getString("playerName") ?: "no user",
+                                oldNumberOfColours = it.arguments?.getString("oldNumberOfColours") ?: "5",
+                                onRestartGame = { oldNumberOfColours, playerName ->
+                                    navController.navigate("MainGame/$oldNumberOfColours/$playerName")
                                 },
                                 onLogout = {
                                     navController.navigate("ProfileScreen")

@@ -121,7 +121,7 @@ fun validateNumberOfColorsToGuess(numberOfColorsToGuess: String): String {
 }
 
 @Composable
-fun ProfileScreenInitial(onStartGame: (String) -> Unit = {}) {
+fun ProfileScreenInitial(onStartGame: (String, String) -> Unit = { s: String, s1: String -> }) {
     val infiniteTransition = rememberInfiniteTransition(label = "Title anim transition")
     val scale by infiniteTransition.animateFloat(
         initialValue = 1f,
@@ -159,7 +159,7 @@ fun ProfileScreenInitial(onStartGame: (String) -> Unit = {}) {
         numberOfColorsToGuessError.value = validateNumberOfColorsToGuess(numberOfColorsToGuess.value)
 
         if (nameError.value.isEmpty() && emailError.value.isEmpty() && numberOfColorsToGuessError.value.isEmpty()) {
-            onStartGame(numberOfColorsToGuess.value)
+            onStartGame(numberOfColorsToGuess.value, name.value)
         }
     }
 

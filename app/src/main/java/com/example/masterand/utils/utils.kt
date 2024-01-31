@@ -2,6 +2,9 @@ package com.example.masterand.utils
 
 import androidx.compose.ui.graphics.Color
 
+
+val emptyRow = List(4) { Color.White }
+
 enum class AvailableColors(val value: Color) {
     Red(Color.Red),
     Green(Color.Green),
@@ -11,6 +14,8 @@ enum class AvailableColors(val value: Color) {
     Magenta(Color.Magenta),
     White(Color.White),
     Black(Color.Black),
+    DarkGray(Color.DarkGray),
+    LightGray(Color.LightGray),
 }
 
 fun nextColor(color: Color): Color {
